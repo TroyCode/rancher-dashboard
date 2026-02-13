@@ -45,7 +45,7 @@ const performSwap = (obj: any): any => {
         newObj[String(value)] = key;
       } else {
         // Keep Object the same
-        newObj[key] = value;
+        newObj[key] = performSwap(value);
       }
     }
 

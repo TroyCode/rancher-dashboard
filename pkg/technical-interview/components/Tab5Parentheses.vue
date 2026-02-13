@@ -11,12 +11,14 @@ function isValidParentheses(s: string): boolean {
   };
 
   for (const char of s) {
-    if (Object.values(map).includes(char)) {
-      stack.push(char);
-    } else if (map[char]) {
+    if (map[char]) {
+      // right parentheses
       if (stack.pop() !== map[char]) {
         return false;
       }
+    } else {
+      // left parentheses
+      stack.push(char);
     }
   }
 

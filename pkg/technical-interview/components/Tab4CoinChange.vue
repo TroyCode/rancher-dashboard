@@ -3,20 +3,37 @@ import { ref, computed } from 'vue';
 import LabeledInput from '@components/Form/LabeledInput/LabeledInput.vue';
 
 function getMinCoins(coins: number[], amount: number): number[] | null {
-  if (amount === 0) return [];
+  if (amount < 0) {
+    return null;
+  }
 
-  const sortedCoins = [...coins].sort((a, b) => b - a);
-  const result: number[] = [];
-  let remaining = amount;
+  const dp = new Array(amount + 1).fill(Infinity);
+  const lastCoin = new Array(amount + 1).fill(-1);
 
-  for (const coin of sortedCoins) {
-    while (remaining >= coin) {
-      remaining -= coin;
-      result.push(coin);
+  dp[0] = 0;
+
+  for (let i = 1; i <= amount; i++) {
+    for (const coin of coins) {
+      if (coin <= i && dp[i - coin] + 1 < dp[i]) {
+        dp[i] = dp[i - coin] + 1;
+        lastCoin[i] = coin;
+      }
     }
   }
 
-  return remaining === 0 ? result : null;
+  if (dp[amount] === Infinity) {
+    return null;
+  }
+
+  const result: number[] = [];
+  let curr = amount;
+
+  while (curr > 0) {
+    result.push(lastCoin[curr]);
+    curr -= lastCoin[curr];
+  }
+
+  return result;
 }
 
 const coinsInput = ref('1, 2, 5');

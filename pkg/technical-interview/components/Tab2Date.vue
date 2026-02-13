@@ -9,7 +9,7 @@ import { escapeHtml } from '@shell/utils/string';
 
 const store = useStore();
 const now = ref(dayjs());
-let timer: any;
+let timer: NodeJS.Timeout | null = null;
 
 const offsetHours = ref(0);
 const offsetMinutes = ref(0);
@@ -22,7 +22,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  clearInterval(timer);
+  if (timer) {
+    clearInterval(timer);
+  }
 });
 
 const newDateTime = ref<dayjs.Dayjs | null>(null);

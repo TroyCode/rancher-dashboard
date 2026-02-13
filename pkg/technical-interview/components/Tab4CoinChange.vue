@@ -66,6 +66,7 @@ const result = computed(() => {
           v-model:value.number="amountInput"
           type="number"
           label="Amount"
+          min="0"
         />
       </div>
     </div>
